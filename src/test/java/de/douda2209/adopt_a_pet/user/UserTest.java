@@ -219,7 +219,10 @@ public class UserTest {
         User b = new User("other@example.com", "otherHash", Role.SHELTER);
 
         a.setId(1L);
-        b.setId(1L);
+        b.setId(1L);  // if we use == instead of equals in User 1L works but
+        // for 1000L it fails since Long valueOf keeps cache of objects from -128 to 127
+        // 1L for both users-> inside that cache of objects
+        // 1000L outside that cache -> each user gets its own Long object and == compares the objects
 
         assertTrue(a.equals(b), "identity is the id only, other fields don't matter");
     }
@@ -289,6 +292,8 @@ public class UserTest {
 
         assertEquals(1, set.size(), "the same object added twice should be stored once");
     }
+
+
 
 
 
