@@ -56,7 +56,6 @@ classDiagram
     }
 
     User --> Role : has one
-    ApplicationStatus ..> ApplicationStatus : allowed transitions
 ```
 
 ---
@@ -205,11 +204,11 @@ classDiagram
 
 ```mermaid
 flowchart LR
-    Client[Client / Swagger UI] --> Security[Security filter: JWT]
-    Security --> Controller[Controller: DTOs only]
-    Controller --> Service[Service: business rules, transactions]
-    Service --> Repository[Repository: Spring Data JPA]
-    Repository --> DB[(PostgreSQL, Flyway migrations)]
+    Client["Client / Swagger UI"] --> Security["Security filter (JWT)"]
+    Security --> Controller["Controller (DTOs only)"]
+    Controller --> Service["Service (business rules, transactions)"]
+    Service --> Repository["Repository (Spring Data JPA)"]
+    Repository --> DB[("PostgreSQL + Flyway migrations")]
 ```
 
 Rules: controllers stay thin, business logic lives in services, authorization is enforced server-side, schema changes only through Flyway.
