@@ -1,0 +1,20 @@
+services:
+  db:
+    image: postgres:17
+    container_name: adopt-a-pet-db
+    environment:
+      POSTGRES_DB: ${DB_NAME:-adoptapet}
+      POSTGRES_USER: ${DB_USER:-adoptapet}
+      POSTGRES_PASSWORD: ${DB_PASSWORD:?Set DB_PASSWORD in the .env file}
+    ports:
+      - "5432:5432"          # host:container. Change the left number if 5432 is already used
+    volumes:
+      - db-data:/var/lib/postgresql/data   # keeps the data when the container is recreated
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${DB_USER:-adoptapet} -d ${DB_NAME:-adoptapet}"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+volumes:
+  db-data:

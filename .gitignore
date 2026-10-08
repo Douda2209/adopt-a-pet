@@ -1,6 +1,12 @@
 .idea/
 target/
 
+# properties file
+application-local.properties
+
+# .env file
+*.env
+
 # Compiled class file
 *.class
 
