@@ -1,13 +1,32 @@
 package de.douda2209.adopt_a_pet.user;
 
+import jakarta.persistence.*;
+
 import java.time.Instant;
 
+@Entity
+@Table(name="users")
 public class User {
+
+    @Id
+    @GeneratedValue(strategy= GenerationType.IDENTITY)
     private Long id = null;
+
+    @Column(nullable=false, length=254)
     private String email;
-    final private String passwordHash;
+
+    @Column(name = "password_hash", nullable=false)
+    private String passwordHash; //removed final because it must be assigned at every constructor, but protection is not lost bc of @Column(updatable = false)
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable=false, length=20)
     private Role role;
-    final Instant createdAt;
+
+    @Column(name = "created_at", nullable=false, updatable=false)
+    Instant createdAt; // removed final because it must be assigned at every constructor, but protection is not lost bc of @Column(updatable = false)
+
+    // default constructor for JPA hibernate:
+    protected User() {}
 
     public User(String email, String passwordHash, Role role) {
 
@@ -80,10 +99,11 @@ public class User {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (o == null || this.getClass() != o.getClass()) return false; // better than isinstanceof() which compares if they're exact (false if someone is a subclass)
-        User user = (User) o; //casting o to User
-        if (this.id == null || user.id == null) return false;
-        return this.id.equals(user.id);
+        if (!(o instanceof User user)) return false; // in order to accept proxy // cast o to user and declares new variable  user of type User
+        //if (o == null || this.getClass() != o.getClass()) return false; // better than isinstanceof() which compares if they're exact (false if someone is a subclass)
+        //User user = (User) o; //casting o to User
+        if (this.getId() == null || user.getId() == null) return false;
+        return this.getId().equals(user.getId());
 
     }
 
